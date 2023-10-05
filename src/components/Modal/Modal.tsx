@@ -78,6 +78,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
+        task.status = event.target.value;
     };
 
     return (
