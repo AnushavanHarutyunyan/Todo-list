@@ -18,7 +18,6 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
     const [range, setRange] = useState<DateRange | undefined>();
 
     const project = useSelector((state: RootState) => state.projects.createdProject.find((proj) => proj.id === projectId));
-
     const task = project?.tasks.find((task) => task.id === id);
 
     const dispatch = useDispatch();
@@ -43,20 +42,21 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
     };
 
     const handleAdd = () => {
-        if (type === "createTask" && setToggle) {
-            const formatedDate = formatDate(range);
-            const newTask = {
-                id: uuid(),
-                projectId: id,
-                title,
-                description,
-                start: formatedDate.start,
-                end: formatedDate.end,
-                priority: selectedOption,
-                attachedFiles: [],
-                status: selectedOption,
-                subTasks: [],
-            };
+        const formatedDate = formatDate(range);
+        const newTask = {
+            id: uuid(),
+            projectId: id,
+            title,
+            description,
+            start: formatedDate.start,
+            end: formatedDate.end,
+            priority: selectedOption,
+            attachedFiles: [],
+            status: selectedOption,
+            subTasks: [],
+        };
+
+        if ((type === "createTask" && setToggle) || (type === "editTask" && setToggle)) {
             dispatch(createTask(newTask));
             setToggle(false);
         }
@@ -70,6 +70,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
             dispatch(createProject(newProject));
             setToggle(false);
         }
+
         setTitle("");
         setDescription("");
         setSelectedOption("");
@@ -78,7 +79,9 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
-        task.status = event.target.value;
+        if (task) {
+            task.status = event.target.value;
+        }
     };
 
     return (

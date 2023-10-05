@@ -13,21 +13,20 @@ export const ProjectReducer = (state = initialState, { type, payload }) => {
                 createdProject: [...state.createdProject, payload],
             };
         case CreateTask: {
-            const updatedProjectsCreateTask = state.createdProject.map((project) => {
-                if (project.id === payload.projectId) {
-                    return {
-                        ...project,
-                        tasks: [...project.tasks, payload],
-                    };
-                }
-                return project;
-            });
-
             return {
                 ...state,
-                createdProject: updatedProjectsCreateTask,
+                createdProject: state.createdProject.map((project) => {
+                    if (project.id === payload.projectId) {
+                        return {
+                            ...project,
+                            tasks: [...project.tasks, payload],
+                        };
+                    }
+                    return project;
+                }),
             };
         }
+
         case DeleteTask: {
             const updatedProjectsDeleteTask = state.createdProject.map((project) => {
                 if (project.id === payload.projectId) {

@@ -7,9 +7,8 @@ import styles from "./taskItem.module.css";
 export default function TaskItem({ title, description, start, end, priority, status, id, projectId }) {
     const [toggleModal, setToggle] = useState(false);
     const dispatch = useDispatch();
-    
+
     const handleEdit = () => {
-        
         setToggle(true);
     };
     const handleDelete = () => {
