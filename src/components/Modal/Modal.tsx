@@ -14,8 +14,7 @@ import { RootState } from "../../store/reducers";
 export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal) {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [checkBoxValue, setCheckboxValue] = useState<string>("");
-    const [isChecked, setIsChecked] = useState<boolean>(false);
+    const [selectedOption, setSelectedOption] = useState<string>("");
     const [range, setRange] = useState<DateRange | undefined>();
 
     const project = useSelector((state: RootState) => state.projects.createdProject.find((proj) => proj.id === projectId));
@@ -53,9 +52,9 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                 description,
                 start: formatedDate.start,
                 end: formatedDate.end,
-                priority: checkBoxValue,
+                priority: selectedOption,
                 attachedFiles: [],
-                status: checkBoxValue,
+                status: selectedOption,
                 subTasks: [],
             };
             dispatch(createTask(newTask));
@@ -73,13 +72,12 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
         }
         setTitle("");
         setDescription("");
-        // setSelectedOption("");
+        setSelectedOption("");
         setRange(undefined);
     };
 
     const handleOptionChange = (event) => {
-        setCheckboxValue(event.target.value);
-        
+        setSelectedOption(event.target.value);
     };
 
     return (
@@ -115,7 +113,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                                                 type="checkbox"
                                                 id="queue"
                                                 value="queue"
-                                                checked={type === "createTask"  && task?.status === "queue"}
+                                                checked={selectedOption === "queue" || (type === "editTask" && task?.status === "queue")}
                                                 onChange={handleOptionChange}
                                             />
                                         </div>
@@ -125,7 +123,10 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                                                 type="checkbox"
                                                 id="development"
                                                 value="development"
-                                                checked={type === "createTask"  && task?.status === "development"}
+                                                checked={
+                                                    selectedOption === "development" ||
+                                                    (type === "editTask" && task?.status === "development")
+                                                }
                                                 onChange={handleOptionChange}
                                             />
                                         </div>
@@ -135,7 +136,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                                                 type="checkbox"
                                                 id="done"
                                                 value="done"
-                                                checked={type === "createTask"  && task?.status === "done"}
+                                                checked={selectedOption === "done" || (type === "editTask" && task?.status === "done")}
                                                 onChange={handleOptionChange}
                                             />
                                         </div>
