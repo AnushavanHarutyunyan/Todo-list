@@ -1,0 +1,9 @@
+.taskItem_content {
+    padding: 20px;
+    border: 1px solid #edeae9;
+    margin: 5px
+}
+
+.taskItem_content:hover {
+    border-color: #afabac;
+}

@@ -1,0 +1,19 @@
+.container {
+    width: 50%;
+    border: 1px solid #edeae9;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 15px;
+}
+.container_taskItem {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 30px;
+}
+.container:hover {
+    border-color: #afabac;
+}
+
+.container__taskItem {
+    display: flex;
+}

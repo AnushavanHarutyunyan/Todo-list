@@ -1,0 +1,41 @@
+.App {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    background-color: hsl(255, 69%, 61%);
+    color: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    margin: 15px 10px 0px;
+}
+
+.rdp {
+    --rdp-cell-size: 40px;
+    --rdp-accent-color: #0000ff;
+    --rdp-background-color: #e7edff;
+    /* Switch to dark colors for dark themes */
+    --rdp-accent-color-dark: #3003e1;
+    --rdp-background-color-dark: #180270;
+    /* Outline border for focused elements */
+    --rdp-outline: 2px solid var(--rdp-accent-color);
+    /* Outline border for focused and selected elements */
+    --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.my-selected:not([disabled]) {
+    font-weight: bold;
+    border: 2px solid currentColor;
+}
+.my-selected:hover:not([disabled]) {
+    border-color: blue;
+    color: blue;
+}
+.my-today {
+    font-weight: bold;
+    font-size: 140%;
+    color: red;
+}
