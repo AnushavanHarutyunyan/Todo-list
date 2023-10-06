@@ -26,7 +26,28 @@ export const ProjectReducer = (state = initialState, { type, payload }) => {
                 }),
             };
         }
-
+        case "editTask": {
+            return {
+                ...state,
+                createdProject: state.createdProject.map((project) => {
+                    if (project.id === payload.projectId) {
+                        return {
+                            ...project,
+                            tasks: project.tasks.map((task) => {
+                                if (task.id === payload.id) {
+                                    return {
+                                        ...task,
+                                        ...payload,
+                                    };
+                                }
+                                return task;
+                            }),
+                        };
+                    }
+                    return project;
+                }),
+            };
+        }
         case DeleteTask: {
             const updatedProjectsDeleteTask = state.createdProject.map((project) => {
                 if (project.id === payload.projectId) {

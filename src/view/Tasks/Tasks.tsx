@@ -11,7 +11,6 @@ function Tasks() {
     const { id } = useParams();
     const [toggleModal, setToggle] = useState(false);
     const project = useSelector((state: RootState) => state.projects.createdProject?.find((proj) => proj.id === id));
-
     const handleToggle = (value) => {
         setToggle(value);
     };
@@ -44,7 +43,7 @@ function Tasks() {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={toggleModal} setToggle={handleToggle} type="createTask" id={id} />
+            <Modal isOpen={toggleModal} setToggle={handleToggle} type="createTask" projectId={id} />
         </div>
     );
 }
