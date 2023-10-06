@@ -10,7 +10,6 @@ import uuid from "react-uuid";
 import cs from "classnames";
 import styles from "./modal.module.css";
 import { RootState } from "../../store/reducers";
-import { taskId } from "../../utils/idGenerator";
 
 export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal) {
     const [title, setTitle] = useState<string>("");
@@ -45,7 +44,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
     const handleAdd = () => {
         const formatedDate = formatDate(range);
         const newTask = {
-            id: taskId,
+            id: uuid(),
             projectId,
             title,
             description,
@@ -68,7 +67,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
 
         if (type === "editTask" && setToggle) {
             const editedTask = {
-                id: taskId,
+                id,
                 title,
                 description,
                 projectId,
@@ -112,7 +111,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                                 <label>Title</label>
                                 <input
                                     type="text"
-                                    value={task?.title}
+                                    value={title}
                                     name={type === "createProject" ? "Projecttitle" : "Tasktitle"}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
@@ -123,7 +122,7 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                                         <label>Description</label>
                                         <input
                                             type="text"
-                                            value={task?.description}
+                                            value={description}
                                             name="description"
                                             onChange={(e) => setDescription(e.target.value)}
                                         />
