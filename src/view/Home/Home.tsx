@@ -8,7 +8,7 @@ import ProjectItem from "../../components/ProjectItem/ProjectItem";
 
 function Home() {
     const createdProject = useSelector((state: RootState) => state.projects.createdProject);
-    const [toggleModal, setToggle] = useState(false);
+    const [isOpen, setToggle] = useState(false);
 
     const handleToggle = (value) => {
         setToggle(value);
@@ -29,7 +29,7 @@ function Home() {
                         <ProjectItem title={proj.name} id={proj.id} />
                     </div>
                 ))}
-                <Modal isOpen={toggleModal} setToggle={handleToggle} type="createProject" />
+                {isOpen ? <Modal isOpen={isOpen} setToggle={handleToggle} type="createProject" /> : null}
             </div>
         </div>
     );

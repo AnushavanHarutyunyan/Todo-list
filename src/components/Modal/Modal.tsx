@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -10,16 +10,15 @@ import uuid from "react-uuid";
 import cs from "classnames";
 import styles from "./modal.module.css";
 import { RootState } from "../../store/reducers";
+import { ITask } from "../../store/props";
 
 export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal) {
+    const project = useSelector((state: RootState) => state.projects.createdProject.find((proj) => proj.id === projectId));
+    const task: ITask = project?.tasks.find((task) => task.id === id);
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [selectedOption, setSelectedOption] = useState<string>("");
-    const [range, setRange] = useState<DateRange | undefined>();
-
-    const project = useSelector((state: RootState) => state.projects.createdProject.find((proj) => proj.id === projectId));
-    const task = project?.tasks.find((task) => task.id === id);
-
+    const [range, setRange] = useState<DateRange | undefined>(task?.range);
     const dispatch = useDispatch();
 
     let footer = <p>Please pick the first day.</p>;
@@ -41,57 +40,60 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
         }
     };
 
-    const handleAdd = () => {
-        const formatedDate = formatDate(range);
+    const handleModalClick = () => {
+        if (type === "createProject") handleCreateProject();
+        if (type === "createTask") handleCreateTask();
+        if (type === "editTask") handleEditTask();
+    };
+
+    const handleCreateProject = () => {
+        const newProject = {
+            id: uuid(),
+            name: title,
+            tasks: [],
+        };
+        dispatch(createProject(newProject));
+        setToggle(false);
+    };
+
+    const handleCreateTask = () => {
         const newTask = {
             id: uuid(),
             projectId,
             title,
             description,
-            start: formatedDate.start,
-            end: formatedDate.end,
+            start: formatDate(range)?.start,
+            end: formatDate(range)?.end,
             priority: selectedOption,
             attachedFiles: [],
             status: selectedOption,
             subTasks: [],
+            range,
         };
 
-        if (type === "createTask" && setToggle) {
-            dispatch(createTask(newTask));
-            setToggle(false);
-            setTitle("");
-            setDescription("");
-            setSelectedOption("");
-            setRange(undefined);
-        }
+        dispatch(createTask(newTask));
+        setToggle(false);
+        setTitle("");
+        setDescription("");
+        setSelectedOption("");
+        setRange(undefined);
+    };
 
-        if (type === "editTask" && setToggle) {
-            const editedTask = {
-                id,
-                title,
-                description,
-                projectId,
-                start: formatedDate.start,
-                end: formatedDate.end,
-                priority: selectedOption,
-                attachedFiles: [],
-                status: selectedOption,
-                subTasks: [],
-            };
-            console.log(editedTask, "edit task");
-
-            dispatch(editeTask(editedTask));
-        }
-
-        if (type === "createProject" && setToggle) {
-            const newProject = {
-                id: uuid(),
-                name: title,
-                tasks: [],
-            };
-            dispatch(createProject(newProject));
-            setToggle(false);
-        }
+    const handleEditTask = () => {
+        const editedTask = {
+            id,
+            title,
+            description,
+            projectId,
+            start: formatDate(range)?.start,
+            end: formatDate(range)?.end,
+            priority: selectedOption,
+            attachedFiles: [],
+            status: selectedOption,
+            subTasks: [],
+            range,
+        };
+        dispatch(editeTask(editedTask));
     };
 
     const handleOptionChange = (event) => {
@@ -100,6 +102,14 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
             task.status = event.target.value;
         }
     };
+
+    useEffect(() => {
+        if (type === "editTask" && task) {
+            setTitle(task.title || "");
+            setDescription(task.description || "");
+            setSelectedOption(task.status || "");
+        }
+    }, [task, type, range]);
 
     return (
         <>
@@ -170,8 +180,8 @@ export default function Modal({ isOpen, type, id, setToggle, projectId }: IModal
                             ) : null}
                         </div>
                         <div>
-                            <a className="button" onClick={handleAdd}>
-                                {type === "editTask" ? "Edit" : "Add"}
+                            <a className="button" onClick={handleModalClick}>
+                                {type === "editTask" ? "Edit" : "Create"}
                             </a>
                             <a className="button" onClick={handleClose}>
                                 Cancel

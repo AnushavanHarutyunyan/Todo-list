@@ -3,5 +3,5 @@ export interface IModal {
     type: "createProject" | "createTask" | "editTask";
     id?: string;
     projectId?: string;
-    setToggle?: (a: boolean) => void;
+    setToggle: (a: boolean) => void;
 }

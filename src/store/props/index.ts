@@ -1,3 +1,6 @@
+import { ReactElement } from "react";
+import { DateRange } from "react-day-picker";
+
 export interface IProject {
     id: string;
     name: string;
@@ -6,6 +9,7 @@ export interface IProject {
 
 export interface ITask {
     id: string;
+    projectId: string;
     title: string;
     description: string;
     start: Date;
@@ -14,6 +18,7 @@ export interface ITask {
     attachedFiles: any[]; // Change to the actual type
     status: string;
     subTasks: any[]; // Change to the actual type
+    range: DateRange;
 }
 
 export interface ITaskState {
@@ -27,4 +32,10 @@ export interface IAppState {
     tasks: {
         createdTask: ITask[];
     };
+}
+
+export interface ITasksRender {
+    queue: ReactElement | null;
+    development: ReactElement | null;
+    done: ReactElement | null;
 }

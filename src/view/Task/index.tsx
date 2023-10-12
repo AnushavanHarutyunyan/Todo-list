@@ -3,14 +3,15 @@ import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import TaskItem from "../../components/TaskItem/TaskItem";
-import styles from "./tasks.module.css";
+import styles from "./task.module.css";
 import Modal from "../../components/Modal/Modal";
 import uuid from "react-uuid";
 
-function Tasks() {
+function Task() {
     const { id } = useParams();
-    const [toggleModal, setToggle] = useState(false);
+    const [isOpen, setToggle] = useState(false);
     const project = useSelector((state: RootState) => state.projects.createdProject?.find((proj) => proj.id === id));
+
     const handleToggle = (value) => {
         setToggle(value);
     };
@@ -26,8 +27,7 @@ function Tasks() {
                                 <TaskItem
                                     title={task.title}
                                     description={task.description}
-                                    start={task.start}
-                                    end={task.end}
+                                    range={task.range}
                                     priority={task.priority}
                                     status={task.status}
                                     id={task.id}
@@ -43,9 +43,9 @@ function Tasks() {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={toggleModal} setToggle={handleToggle} type="createTask" projectId={id} />
+            {isOpen ? <Modal isOpen={isOpen} setToggle={handleToggle} type="createTask" projectId={id} /> : null}
         </div>
     );
 }
 
-export default Tasks;
+export default Task;

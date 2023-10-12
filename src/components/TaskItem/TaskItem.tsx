@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { deleteTask } from "../../store/actions";
+import formatDate from "../../utils/formatDate";
 import Modal from "../Modal/Modal";
 import styles from "./taskItem.module.css";
 
-export default function TaskItem({ title, description, start, end, priority, status, id, projectId }) {
-    const [toggleModal, setToggle] = useState(false);
+export default function TaskItem({ title, description, range, priority, status, id, projectId }) {
+    const [isOpen, setToggle] = useState(false);
     const dispatch = useDispatch();
 
     const handleEdit = () => {
@@ -23,8 +24,8 @@ export default function TaskItem({ title, description, start, end, priority, sta
             <div>
                 <h3>Title - {title}</h3>
                 <p>Description - {description}</p>
-                <p>Start - {start}</p>
-                <p>End - {end}</p>
+                <p>Start - {formatDate(range)?.start}</p>
+                <p>End - {formatDate(range)?.end}</p>
                 <p>Priority - {priority}</p>
                 <p>Status - {status}</p>
             </div>
@@ -34,7 +35,7 @@ export default function TaskItem({ title, description, start, end, priority, sta
             <a className="button" onClick={handleDelete}>
                 Delete
             </a>
-            <Modal isOpen={toggleModal} setToggle={handleToggle} type="editTask" id={id} projectId={projectId} />
+            {isOpen ? <Modal isOpen={isOpen} setToggle={handleToggle} type="editTask" id={id} projectId={projectId} /> : null}
         </div>
     );
 }

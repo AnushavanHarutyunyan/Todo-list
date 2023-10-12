@@ -1,6 +1,10 @@
-export default function formatDate(date) {
-    return {
-        start: date?.from.toISOString().slice(0, 10),
-        end: date?.to.toISOString().slice(0, 10),
-    };
+import { DateRange } from "react-day-picker";
+
+export default function formatDate(dateRange: DateRange | { from: ""; to: "" } | undefined) {
+    if (dateRange && dateRange.from && dateRange.to) {
+        return {
+            start: dateRange.from.toLocaleDateString(),
+            end: dateRange.to.toLocaleDateString(),
+        };
+    }
 }

@@ -12,7 +12,6 @@
 }
 .container:hover {
     border-color: #afabac;
-    cursor: pointer;
 }
 
 .container__taskItem {
